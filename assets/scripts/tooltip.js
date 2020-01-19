@@ -3,9 +3,13 @@ class Tooltip extends HTMLElement {
     super()
   
     this.attachShadow({ mode: 'open' })
-    this._container
-    this._icon
-    this._text = 'Tooltip!'
+
+    Object.assign(this, {
+      _isVisible: false,
+      _container: undefined,
+      _icon: undefined,
+      _text: 'Tooltip!',
+    })
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -35,6 +39,8 @@ class Tooltip extends HTMLElement {
     this._icon.addEventListener('mouseleave', this._hide)
 
     this.shadowRoot.appendChild(this._icon)
+
+    this._render()
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -53,13 +59,23 @@ class Tooltip extends HTMLElement {
   }
 
   _show = () => {
-    this._container = document.createElement('div')
-    this._container.textContent = this._text
-    
-    this.shadowRoot.appendChild(this._container)
+    this._isVisible = true
+    this._render()
   }
 
   _hide = () => {
+    this._isVisible = false
+    this._render()
+  }
+
+  _render() {
+    if (this._isVisible) {
+      this._container = document.createElement('div')
+      this._container.textContent = this._text
+      
+      return void this.shadowRoot.appendChild(this._container)
+    }
+
     this.shadowRoot.removeChild(this._container)
   }
 }
