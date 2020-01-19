@@ -19,6 +19,10 @@ class Tooltip extends HTMLElement {
     `
   }
 
+  static get observedAttributes() {
+    return ['text']
+  }
+
   connectedCallback() {
     if (this.hasAttribute('text')) {
       this._text = this.getAttribute('text')
@@ -30,6 +34,16 @@ class Tooltip extends HTMLElement {
     icon.addEventListener('mouseleave', this._hide.bind(this))
 
     this.shadowRoot.appendChild(icon)
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return
+
+    const attribute = {
+      text: '_text'
+    }[name]
+
+    this[attribute] = newValue
   }
 
   _show() {
