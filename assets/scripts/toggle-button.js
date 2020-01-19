@@ -19,7 +19,7 @@ class ToggleButton extends HTMLElement {
         :host {
           display: block;
           padding: .5rem 1rem;
-          background-color: var(--default-color);
+          background-color: var(--default-color, #e2e2e2);
         }
 
         /* if app-toggle-button has a '.button-section' parent */
