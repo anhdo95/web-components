@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Project Board</title>
+    <link rel="stylesheet" href="assets/styles/app.css" />
+    <script src="assets/scripts/tooltip.js" defer type="module"></script>
+    <script src="assets/scripts/confirm-link.js" defer type="module"></script>
+    <script src="assets/scripts/toggle-button.js" defer type="module"></script>
+  </head>
+  <style>
+    body {
+      margin: 2rem;
+    }
+    body > *:not(script) {
+      display: block;
+      margin: 2rem 0;
+    }
+  </style>
+  <body>
+    <p><app-tooltip>Web components</app-tooltip> are awesome!</p>
+    <app-tooltip text="Hello world!"></app-tooltip>
+
+    <a is="app-confirm-link" href="https://google.com">Google</a>
+
+    <section class="button-section">
+      <app-toggle-button class="primary" is-visible>
+        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
+      </app-toggle-button>
+    </section>
+
+    <app-toggle-button class="secondary" is-visible>
+        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
+      </app-toggle-button>
+  </body>
+</html>
