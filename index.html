@@ -55,11 +55,17 @@
       })
 
       modal.addEventListener('okclick', (event) => {
-        console.log('OK')
+        setTimeout(() => {
+          // Sending request's data to the API
+          console.log('event', event)
+
+          modal.hide()
+        }, 500)
       })
 
       modal.addEventListener('cancelclick', (event) => {
-        console.log('CANCEL')
+        // You might reset your form maybe
+        modal.hide()
       })
     </script>
   </body>

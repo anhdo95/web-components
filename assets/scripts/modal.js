@@ -12,12 +12,88 @@ class Modal extends HTMLElement {
     }
 
     this.attachShadow({ mode: 'open' })
+    this._render()
+
+    this._attachEvents()
+
+    this._handleSlotsChange()
+  }
+
+  static get observedAttributes() {
+    return ['is-open']
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'is-open') {
+      this.state.isOpen = newValue === "true"
+    }
+  }
+
+  // #region public methods
+  open() {
+    this.setAttribute('is-open', true)
+    this.state.isOpen = true
+  }
+
+  hide() {
+    this._hide()
+  }
+  // #endregion
+
+  /**
+   * This feature might help at anytime
+   */
+  _handleSlotsChange() {
+    const slots = this.shadowRoot.querySelectorAll('slot')
+
+    for (const slot of slots) {
+      slot.addEventListener('slotchange', (event) => {
+        console.dir(slot)
+      })
+    }
+  }
+
+  _attachEvents() {
+    const backdrop = this.shadowRoot.querySelector('.backdrop')
+    const okButton = this.shadowRoot.getElementById('btn-ok')
+    const cancelButton = this.shadowRoot.getElementById('btn-cancel')
+
+    backdrop.addEventListener('click', this._hide)
+    okButton.addEventListener('click', this._ok)
+    cancelButton.addEventListener('click', this._cancel)
+  }
+
+  _hide = () => {
+    this.removeAttribute('is-open')
+    this.state.isOpen = false
+  }
+
+  _ok = () => {
+    // Give the same to the `cancelclick` event without any configuration
+    const okclickEvent = new Event('okclick')
+    this.dispatchEvent(okclickEvent)
+  }
+
+  _cancel = (event) => {
+    const cancelclickEvent = new Event('cancelclick', {
+      // Can bubble up and trigger outside of the shadow DOM
+      bubbles: true,
+      composed: true
+    })
+    event.target.dispatchEvent(cancelclickEvent)
+  }
+
+  _render() {
     this.shadowRoot.innerHTML = `
       <style>
         :host([is-open]) .backdrop,
         :host([is-open]) .modal-box {
           opacity: 1;
           visibility: visible;
+        }
+
+        :host([is-open]) .modal-box {
+          top: 30%;
         }
 
         ::slotted(.title) {
@@ -32,14 +108,14 @@ class Modal extends HTMLElement {
           bottom: 0;
           opacity: 0;
           visibility: hidden;
-          background-color: rgba(0, 0, 0, .3);
-          transition: all .5s;
+          background-color: rgba(0, 0, 0, .6);
+          transition: all .3s;
         }
 
         .modal-box {
           position: fixed;
           left: 50%;
-          top: 30%;
+          top: 0;
           min-width: 50%;
           opacity: 0;
           visibility: hidden;
@@ -91,41 +167,11 @@ class Modal extends HTMLElement {
         </header>
         <main class="modal-content"><slot></slot></main>
         <footer class="modal-footer">
-          <button class="btn btn-ok">${this.props.okButtonText}</button>
-          <button class="btn btn-cancel">${this.props.cancelButtonText}</button>
+          <button id="btn-ok" class="btn btn-ok">${this.props.okButtonText}</button>
+          <button id="btn-cancel" class="btn btn-cancel">${this.props.cancelButtonText}</button>
         </footer>
       </div>
     `
-
-    this.handleSlotsChange()
-  }
-
-  static get observedAttributes() {
-    return ['is-open']
-  }
-
-  /**
-   * This feature might help at anytime
-   */
-  handleSlotsChange() {
-    const slots = this.shadowRoot.querySelectorAll('slot')
-
-    for (const slot of slots) {
-      slot.addEventListener('slotchange', (event) => {
-        console.dir(slot)
-      })
-    }
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'is-open') {
-      this.state.isOpen = newValue === "true"
-    }
-  }
-
-  open() {
-    this.setAttribute('is-open', true)
-    this.state.isOpen = true
   }
 }
 
