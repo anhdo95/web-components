@@ -9,6 +9,7 @@
     <script src="assets/scripts/tooltip.js" defer type="module"></script>
     <script src="assets/scripts/confirm-link.js" defer type="module"></script>
     <script src="assets/scripts/toggle-button.js" defer type="module"></script>
+    <script src="assets/scripts/modal.js" defer type="module"></script>
   </head>
   <style>
     body {
@@ -38,5 +39,28 @@
     <app-toggle-button is-visible>
       <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
     </app-toggle-button>
+
+    <button id="openModalButton">Open a modal</button>
+    <app-modal id="modal" ok-button-text="Save" cancel-button-text="Cancel">
+      <h3 slot="title" class="title">Create a new content</h3>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis cupiditate est nostrum atque beatae natus corporis, esse asperiores illo dolore quas consequuntur itaque debitis ad cum ex? Ratione, ut praesentium.
+    </app-modal>
+
+    <script>
+      const openModalButton = document.getElementById('openModalButton')
+      const modal = document.getElementById('modal')
+
+      openModalButton.addEventListener('click', () => {
+        modal.open()
+      })
+
+      modal.addEventListener('okclick', (event) => {
+        console.log('OK')
+      })
+
+      modal.addEventListener('cancelclick', (event) => {
+        console.log('CANCEL')
+      })
+    </script>
   </body>
 </html>
